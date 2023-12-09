@@ -3,14 +3,14 @@ import bcrypt from 'bcryptjs';
 import expressAsyncHandler from 'express-async-handler';
 import jwt from 'jsonwebtoken';
 import User from '../models/userModel.js';
-import { isAuth, isAdmin, generateToken, baseUrl, mailgun } from '../utils.js';
+import { isAuth, isAdmin, generateToken, baseUrl, mailgun, isActivated } from '../utils.js';
 
 const userRouter = express.Router();
 
 userRouter.get(
   '/',
   isAuth,
-  isAdmin,
+  isActivated,
   expressAsyncHandler(async (req, res) => {
     const users = await User.find({});
     res.send(users);
@@ -19,8 +19,8 @@ userRouter.get(
 
 userRouter.get(
   '/:id',
-  isAuth,
-  isAdmin,
+  isAuth, 
+  isActivated,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
     if (user) {
@@ -34,6 +34,7 @@ userRouter.get(
 userRouter.put(
   '/profile',
   isAuth,
+  isActivated,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
@@ -49,6 +50,7 @@ userRouter.put(
         name: updatedUser.name,
         email: updatedUser.email,
         isAdmin: updatedUser.isAdmin,
+        isActivated: updatedUser.isActivated,
         token: generateToken(updatedUser),
       });
     } else {
@@ -123,6 +125,7 @@ userRouter.post(
 userRouter.put(
   '/:id',
   isAuth,
+  isActivated,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
@@ -130,6 +133,8 @@ userRouter.put(
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
       user.isAdmin = Boolean(req.body.isAdmin);
+      user.isActivated = Boolean(req.body.isActivated);
+      
       const updatedUser = await user.save();
       res.send({ message: 'User Updated', user: updatedUser });
     } else {
@@ -167,6 +172,7 @@ userRouter.post(
           name: user.name,
           email: user.email,
           isAdmin: user.isAdmin,
+          isActivated: user.isActivated,
           token: generateToken(user),
         });
         return;
@@ -190,6 +196,7 @@ userRouter.post(
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      isActivated: user.isActivated,
       token: generateToken(user),
     });
   })

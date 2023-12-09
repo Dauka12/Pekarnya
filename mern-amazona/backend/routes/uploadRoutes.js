@@ -2,7 +2,7 @@ import express from 'express';
 import multer from 'multer';
 import { v2 as cloudinary } from 'cloudinary';
 import streamifier from 'streamifier';
-import { isAdmin, isAuth } from '../utils.js';
+import { isAdmin, isAuth,isActivated } from '../utils.js';
 
 const upload = multer();
 
@@ -12,6 +12,7 @@ uploadRouter.post(
   '/',
   isAuth,
   isAdmin,
+  isActivated,
   upload.single('file'),
   async (req, res) => {
     cloudinary.config({

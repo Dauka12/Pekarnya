@@ -28,6 +28,7 @@ import SearchScreen from './screens/SearchScreen';
 import ProtectedRoute from './components/ProtectedRoute';
 import DashboardScreen from './screens/DashboardScreen';
 import AdminRoute from './components/AdminRoute';
+import ActivatedRoute from './components/ActivatedRoute';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
@@ -123,7 +124,17 @@ function App() {
                       Войти
                     </Link>
                   )}
-                  {userInfo && userInfo.isAdmin && (
+                   {userInfo && userInfo.isActivated &&  (
+                    <NavDropdown title="Activated" id="activated-nav-dropdown">
+                      <LinkContainer to="/activated/dashboard">
+                        <NavDropdown.Item>Приборная панель</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/activated/orders">
+                        <NavDropdown.Item>История заказов</NavDropdown.Item>
+                      </LinkContainer>
+                    </NavDropdown>
+                  )}
+                  {userInfo && userInfo.isAdmin && userInfo.isActivated &&(
                     <NavDropdown title="Admin" id="admin-nav-dropdown">
                       <LinkContainer to="/admin/dashboard">
                         <NavDropdown.Item>Приборная панель</NavDropdown.Item>
@@ -139,6 +150,7 @@ function App() {
                       </LinkContainer>
                     </NavDropdown>
                   )}
+                 
                 </Nav>
               </Navbar.Collapse>
             </Container>
@@ -219,7 +231,7 @@ function App() {
               ></Route>
               <Route
                 path="/shipping"
-                element={<ShippingAddressScreen />}
+                element={<ActivatedRoute><ShippingAddressScreen /></ActivatedRoute>}
               ></Route>
               <Route path="/payment" element={<PaymentMethodScreen />}></Route>
               {/* Admin Routes */}
@@ -229,6 +241,22 @@ function App() {
                   <AdminRoute>
                     <DashboardScreen />
                   </AdminRoute>
+                }
+              ></Route>
+              <Route
+                path="/activated/dashboard"
+                element={
+                  <ActivatedRoute>
+                    <DashboardScreen />
+                  </ActivatedRoute>
+                }
+              ></Route>
+              <Route
+                path="/activated/orders"
+                element={
+                  <ActivatedRoute>
+                    <OrderListScreen />
+                  </ActivatedRoute>
                 }
               ></Route>
               <Route

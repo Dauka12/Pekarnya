@@ -11,6 +11,7 @@ import MessageBox from '../components/MessageBox';
 import { Store } from '../Store';
 import { getError } from '../utils';
 
+
 const reducer = (state, action) => {
   switch (action.type) {
     case 'FETCH_REQUEST':
@@ -46,6 +47,7 @@ export default function UserEditScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isActivated, setIsActivated] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -57,6 +59,7 @@ export default function UserEditScreen() {
         setName(data.name);
         setEmail(data.email);
         setIsAdmin(data.isAdmin);
+        setIsActivated(data.isActivated);
         dispatch({ type: 'FETCH_SUCCESS' });
       } catch (err) {
         dispatch({
@@ -74,7 +77,7 @@ export default function UserEditScreen() {
       dispatch({ type: 'UPDATE_REQUEST' });
       await axios.put(
         `/api/users/${userId}`,
-        { _id: userId, name, email, isAdmin },
+        { _id: userId, name, email, isAdmin, isActivated },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
@@ -103,7 +106,7 @@ export default function UserEditScreen() {
       ) : (
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3" controlId="name">
-            <Form.Label>Name</Form.Label>
+            <Form.Label>Имя</Form.Label>
             <Form.Control
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -111,7 +114,7 @@ export default function UserEditScreen() {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="email">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Электронная почта</Form.Label>
             <Form.Control
               value={email}
               type="email"
@@ -127,6 +130,14 @@ export default function UserEditScreen() {
             label="isAdmin"
             checked={isAdmin}
             onChange={(e) => setIsAdmin(e.target.checked)}
+              />
+                <Form.Check
+            className="mb-3"
+            type="checkbox"
+            id="isActivated"
+            label="isActivated"
+            checked={isActivated}
+            onChange={(e) => setIsActivated(e.target.checked)}
           />
 
           <div className="mb-3">

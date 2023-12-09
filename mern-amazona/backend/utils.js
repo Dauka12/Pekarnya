@@ -15,6 +15,7 @@ export const generateToken = (user) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      isActivated:user.isActivated
     },
     process.env.JWT_SECRET,
     {
@@ -45,6 +46,14 @@ export const isAdmin = (req, res, next) => {
     next();
   } else {
     res.status(401).send({ message: 'Invalid Admin Token' });
+  }
+};
+
+export const isActivated = (req, res, next) => {
+  if (req.user && req.user.isActivated) {
+    next();
+  } else {
+    res.status(401).send({ message: 'Не подтвержденный профиль' });
   }
 };
 

@@ -77,7 +77,7 @@ export default function PlaceOrderScreen() {
 
   useEffect(() => {
     if (!cart.paymentMethod) {
-      navigate('/payment');
+      navigate('/placeorder');
     }
   }, [cart, navigate]);
 

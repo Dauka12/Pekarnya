@@ -3,14 +3,14 @@ import expressAsyncHandler from 'express-async-handler';
 import Order from '../models/orderModel.js';
 import User from '../models/userModel.js';
 import Product from '../models/productModel.js';
-import { isAuth, isAdmin, mailgun, payOrderEmailTemplate } from '../utils.js';
+import { isAuth, isAdmin,isActivated, mailgun, payOrderEmailTemplate } from '../utils.js';
 
 const orderRouter = express.Router();
 
 orderRouter.get(
   '/',
   isAuth,
-  isAdmin,
+  isActivated,
   expressAsyncHandler(async (req, res) => {
     const orders = await Order.find().populate('user', 'name');
     res.send(orders);
@@ -20,6 +20,7 @@ orderRouter.get(
 orderRouter.post(
   '/',
   isAuth,
+  isActivated,
   
   expressAsyncHandler(async (req, res) => {
     const newOrder = new Order({
@@ -41,7 +42,7 @@ orderRouter.post(
 orderRouter.get(
   '/summary',
   isAuth,
-  isAdmin,
+  isActivated,
   expressAsyncHandler(async (req, res) => {
     const orders = await Order.aggregate([
       {

@@ -106,7 +106,8 @@ export default function UserListScreen() {
               
               <th>Имя</th>
               <th>Почта</th>
-              <th>Админ?</th>
+                  <th>Админ?</th>
+                  <th>Подтвержденный?</th>
               <th>Действие</th>
             </tr>
           </thead>
@@ -117,6 +118,7 @@ export default function UserListScreen() {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.isAdmin ? 'ДА' : 'Нет'}</td>
+                <td>{user.isActivated ? 'ДА' : 'Нет'}</td>
                 <td>
                   <Button
                     type="button"
