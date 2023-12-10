@@ -12,7 +12,7 @@ import fileUpload from "express-fileupload"
 dotenv.config();
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect('mongodb+srv://Ali:Ali27127@clusternew.pbefhin.mongodb.net/?retryWrites=true&w=majority')
   .then(() => {
     console.log("connected to db");
   })
