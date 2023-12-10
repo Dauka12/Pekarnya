@@ -7,11 +7,12 @@ import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 import uploadRouter from "./routes/uploadRoutes.js";
+import fileUpload from "express-fileupload"
 
 dotenv.config();
 
 mongoose
-  .connect('mongodb+srv://Ali:Ali27127@clusternew.pbefhin.mongodb.net/?retryWrites=true&w=majority')
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("connected to db");
   })
@@ -23,7 +24,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(fileUpload({}))
 app.get("/api/keys/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
